@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Viewer</title>
+    <link rel="stylesheet" type="text/css" href="Selection.css">
+</head>
+<body>
+    <h1>Document Viewer</h1>
+    <div id="workspace">
+        <div id="documentList">
+            <h2>Document List</h2>
+            <ul id="list">
+                <li onclick="loadDocument('document 1.txt')">Document 1</li>
+                <li onclick="loadDocument('document 2.txt')">Document 2</li>
+                <li onclick="loadDocument('document 3.txt')">Document 3</li>
+            </ul>
+        </div>
+        <div id="documentContent">
+            <h2>Document Content</h2>
+            <pre id="contentDisplay"></pre>
+        </div>
+    </div>
+
+    <script src="selection.js"></script>
+</body>
+</html>

@@ -1,3 +1,23 @@
 #sidebar-list ul li {
   display: block;
 }
+
+.sortable-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sortable-list li {
+border: 1px solid #ccc;
+padding: 10px;
+margin: 5px;
+cursor: grab;
+}
+
+.sidebar {
+  position: fixed;
+  width: 11%; /* Adjust this to change the width of the sidebar */
+  height: 100%;
+  overflow: auto;
+  background-color: #f5f5f5; /* Adjust this to change the background color of the sidebar */
+}

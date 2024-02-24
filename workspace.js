@@ -24,33 +24,91 @@ document.addEventListener('DOMContentLoaded', function () {
     fileNames.push(`USCBP_${formattedNumber}`);
   }
 
-  console.log(fileNames);
+  //console.log(fileNames);
 
   fileNames.forEach(fileName => {
     const listItem = document.createElement('li');
     listItem.textContent = fileName;
-
     list.appendChild(listItem);
   });
 
-  // Include Sortable.js library directly in the script
-  
-    // Initialize Sortable when the library is loaded
+
     new Sortable(list, {
       animation: 150, // animation duration in milliseconds
       ghostClass: 'sortable-ghost', // class for the drop placeholder
       chosenClass: 'sortable-chosen', // class for the chosen item while dragging
       dragClass: 'sortable-drag', // class for the dragging item
-      onEnd: function (/**Event*/evt) {
+      onEnd: function (evt) {
         // Triggered when the item is dropped
         console.log('Item dropped:', evt.item);
       },
     });
+
+  // Execute code on click
+  $(list).on('click', 'li', function() {
+    $(this).toggleClass('selected'); // change 'selected' to the name of your selected class
+
+    // If the rectangle already exists, show or hide it
+    if ($(this).data('rectangle')) {
+      const rectangle = $(this).data('rectangle');
+      rectangle.toggle();
+    } else {
+      // Create a rectangle, make it draggable, and append it to the body
+      const rectangle = $('<div>').css({
+        width: '20vw',
+        background: 'white',
+        border: '2px solid black',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        padding: '10px',
+        overflow: 'auto'
+      }).draggable({
+        start: function(event, ui) {
+          // This is the original mouse position
+          const click = {
+            left: event.clientX,
+            top: event.clientY
+          };
+
+          $(document).on('mousemove', function(event) {
+            // This is the new mouse position
+            const move = {
+              left: event.clientX,
+              top: event.clientY
+            };
+
+            // This is the difference between the new and original mouse position
+            const offset = {
+              left: move.left - click.left,
+              top: move.top - click.top
+            };
+
+            // Move the draggable element by the same amount the mouse has moved
+            ui.position = {
+              top: ui.originalPosition.top + offset.top,
+              left: ui.originalPosition.left + offset.left
+            };
+          });
+        },
+        stop: function() {
+          $(document).off('mousemove');
+        }
+      });
+      $('body').append(rectangle);
+
+      // Store a reference to the rectangle in the list item
+      $(this).data('rectangle', rectangle);
+
+      // Load the text and set it as the content of the rectangle
+      d3.text('data/' + $(this).text()).then(function(data) {
+        rectangle.text(data);
+      }).catch(function(error) {
+        console.log(error);
+      });
+    }
+  });
+
 });
 
 
-d3.text("data/CIA_08").then(function(data) {
-  console.log(data);
-}).catch(function(error) {
-  console.log(error);
-});
